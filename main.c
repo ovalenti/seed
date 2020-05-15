@@ -6,8 +6,21 @@
  * LICENSE file in the root directory of this source tree.
  */
 
+#include "globals.h"
 #include "interpreter.h"
+#include "basic_io.h"
+
+static int extra_builtin_basic_io(char **pos) {
+	if (eat("[INC]", pos)) {
+		stack[stack_ptr++] = basic_io_inc();
+	} else if (eat("[OUTC]", pos)) {
+		basic_io_outc(stack[--stack_ptr]);
+	} else
+		return 0;
+	return !0;
+}
 
 int main() {
-	execute();
+	extra_builtin = &extra_builtin_basic_io;
+	execute_at(program);
 }

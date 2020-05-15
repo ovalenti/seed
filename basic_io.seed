@@ -1,0 +1,46 @@
+/*
+ * Copyright (c) 2020, Olivier Valentin
+ * All rights reserved.
+ *
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+#ifndef BASIC_IO_SEED
+#define BASIC_IO_SEED
+
+#include "base.seed"
+
+// Eat and print a single digit
+"{"
+"	[DUP]"
+"	0x30" // '0'
+"	0x37" // 'A' - 10
+"	{[SWAP]}"
+"	3 [ROT]	0xa [GE]"
+"	?"
+"	[DROP]"
+"	[ADD]"
+"	[OUTC]"
+"} {PRINTDIGIT} [STORE]"
+
+// Base for printing integers
+"10 {IO.INTBASE} [STORE]"
+
+// Eat and print a numeric value (base is IO.INTBASE)
+"{"
+"	[DUP]"
+"	{IO.INTBASE}* [GE]"
+"	{"
+"		[DUP]"
+"		{IO.INTBASE}* [DIV]"
+"		[PRINTINT]"
+"	} [SWAP] ?"
+"	{IO.INTBASE}* [MOD]"
+"	[PRINTDIGIT]"
+"} {PRINTINT} [STORE]"
+
+// New-line
+"{ 0xa [OUTC] } {NL} [STORE]"
+
+ #endif

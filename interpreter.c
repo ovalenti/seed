@@ -10,8 +10,10 @@
 
 #include "globals.h"
 
-static unsigned long stack[256];
-static unsigned long stack_ptr = 0;
+unsigned long stack[256];
+unsigned long stack_ptr = 0;
+
+int (*extra_builtin)(char** loc) = 0;
 
 #define SCOPE_LEN 256
 static struct scope {
@@ -42,7 +44,7 @@ static unsigned long* scope_find(char* name) {
 	return &p->value;
 }
 
-static int eat(const char *word, char **location) {
+int eat(const char *word, char **location) {
 	char *ptr = *location;
 	while (*word == *ptr) {
 		word++;
@@ -121,7 +123,7 @@ static void swap(unsigned long *a, unsigned long *b) {
 		unsigned long v = stack[--stack_ptr]; \
 		stack[stack_ptr - 1] = stack[stack_ptr - 1] op v;
 
-static void execute_at(char *loc) {
+void execute_at(char *loc) {
 	while (1) {
 		skip(&loc);
 
@@ -154,10 +156,6 @@ static void execute_at(char *loc) {
 		} else if (eat("[GE]", &loc)) { BIN_ARITH(>=)
 		} else if (eat("[NOT]", &loc)) {
 			stack[stack_ptr - 1] = ~stack[stack_ptr - 1];
-		} else if (eat("[PRINT]", &loc)) {
-			print(stack[--stack_ptr]);
-		} else if (eat("[PUTC]", &loc)) {
-			put(stack[--stack_ptr]);
 		} else if (eat("!", &loc)) {
 			execute_at((char *)stack[--stack_ptr]);
 		} else if (eat("?", &loc)) {
@@ -174,6 +172,8 @@ static void execute_at(char *loc) {
 		} else if (eat("[STORE]", &loc)) {
 			unsigned long name = stack[--stack_ptr];
 			*scope_find((char*)name) = stack[--stack_ptr];
+		} else if (extra_builtin && extra_builtin(&loc)) {
+			// nothing
 		} else if (*loc == '[') {
 			execute_at((char *)*scope_find(loc + 1));
 			until(']', &loc);
@@ -182,8 +182,4 @@ static void execute_at(char *loc) {
 			push_value(&loc);
 		}
 	}
-}
-
-void execute() {
-	execute_at(program);
 }

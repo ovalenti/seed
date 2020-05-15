@@ -6,9 +6,13 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-#ifndef GLOBALS_H_
-#define GLOBALS_H_
+#ifndef BASIC_IO_H_
+#define BASIC_IO_H_
 
-extern char* program;
+// Prints a character
+void basic_io_outc(char c);
 
-#endif /* GLOBALS_H_ */
+// Waits for a character to be available and return it
+char basic_io_inc();
+
+#endif /* BASIC_IO_H_ */

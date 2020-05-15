@@ -6,9 +6,12 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-#ifndef GLOBALS_H_
-#define GLOBALS_H_
+#include <stdio.h>
 
-extern char* program;
+void basic_io_outc(char c) {
+	putc(c, stdout);
+}
 
-#endif /* GLOBALS_H_ */
+char basic_io_inc() {
+	return getc(stdin);
+}

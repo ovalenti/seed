@@ -6,9 +6,9 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-#ifndef GLOBALS_H_
-#define GLOBALS_H_
+#ifndef BASE_SEED
+#define BASE_SEED
 
-extern char* program;
+"{ 1 [ROT] } {SWAP} [STORE]"
 
-#endif /* GLOBALS_H_ */
+ #endif

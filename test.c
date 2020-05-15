@@ -6,12 +6,11 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-#include <stdio.h>
-
 #include "globals.h"
 
 char* program =
-		"{ 1 [ROT] } {SWAP} [STORE]"
+#include "base.seed"
+#include "basic_io.seed"
 		"{"
 		"	[DUP]"
 		"	2 [GE]"
@@ -28,19 +27,11 @@ char* program =
 		"} {FIBO} [STORE]"
 
 		"4 [FIBO]"
-		"[PRINT]"
+		"[PRINTINT] [NL]"
 
 		"5 [FIBO]"
-		"[PRINT]"
+		"[PRINTINT] [NL]"
 
 		"10 [FIBO]"
-		"[PRINT]"
+		"[PRINTINT] [NL]"
 		"}";
-
-void print(unsigned long v) {
-	printf("%lu\n", v);
-}
-
-void put(char c) {
-	putchar(c);
-}
