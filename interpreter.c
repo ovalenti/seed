@@ -111,6 +111,12 @@ static void push_value(char **location) {
 	}
 }
 
+static void swap(unsigned long *a, unsigned long *b) {
+	unsigned long v = *a;
+	*a = *b;
+	*b = v;
+}
+
 #define BIN_ARITH(op) \
 		unsigned long v = stack[--stack_ptr]; \
 		stack[stack_ptr - 1] = stack[stack_ptr - 1] op v;
@@ -126,11 +132,9 @@ static void execute_at(char *loc) {
 			stack_ptr++;
 		} else if (eat("[ROT]", &loc)) {
 			int r = stack[--stack_ptr]; // pop
-			unsigned long *base = &stack[stack_ptr - r - 1];
-			unsigned long v = stack[stack_ptr - 1];
+			unsigned long *p1 = &stack[stack_ptr - r], *p2 = p1 - 1;
 			while (r--)
-				base[r + 1] = base[r];
-			*base = v;
+				swap(p1++, p2++);
 		} else if (eat("[PEEK]", &loc)) {
 			unsigned char* addr = (unsigned char*)stack[stack_ptr - 1];
 			stack[stack_ptr - 1] = *addr;
