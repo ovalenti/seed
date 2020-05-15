@@ -145,6 +145,8 @@ static void execute_at(char *loc) {
 		} else if (eat("[ADD]", &loc)) { BIN_ARITH(+)
 		} else if (eat("[SUB]", &loc)) { BIN_ARITH(-)
 		} else if (eat("[MUL]", &loc)) { BIN_ARITH(*)
+		} else if (eat("[DIV]", &loc)) { BIN_ARITH(/)
+		} else if (eat("[MOD]", &loc)) { BIN_ARITH(%)
 		} else if (eat("[SHIFT]", &loc)) { BIN_ARITH(<<)
 		} else if (eat("[AND]", &loc)) { BIN_ARITH(&)
 		} else if (eat("[OR]", &loc)) { BIN_ARITH(|)
