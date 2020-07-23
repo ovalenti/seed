@@ -14,6 +14,7 @@ unsigned long stack[256];
 unsigned long stack_ptr = 0;
 
 int (*extra_builtin)(char** loc) = 0;
+int (*symbol_not_found)(char *symbol_name) = 0;
 
 #define SCOPE_LEN 256
 static struct scope {
@@ -30,7 +31,7 @@ static int str_match(char *v1, char *v2) {
 	return *v1 == '}' || *v1 == ']';
 }
 
-unsigned long* scope_find(char* name) {
+unsigned long* scope_find(char* name, int debug_value_expected) {
 	struct scope *p = scope, *end = scope + scope_used;
 
 	while (p < end) {
@@ -38,6 +39,8 @@ unsigned long* scope_find(char* name) {
 			break;
 		p++;
 	}
+	if (p == end && debug_value_expected && symbol_not_found)
+		symbol_not_found(name);
 	if (p == end)
 		scope_used++;
 	p->name = (unsigned long)name;
@@ -168,14 +171,14 @@ void execute_at(char *loc) {
 		} else if (eat("#", &loc)) {
 			until('\n', &loc);
 		} else if (eat("*", &loc)) {
-			stack[stack_ptr - 1] = *scope_find((char*)stack[stack_ptr - 1]);
+			stack[stack_ptr - 1] = *scope_find((char*)stack[stack_ptr - 1], 1);
 		} else if (eat("[STORE]", &loc)) {
 			unsigned long name = stack[--stack_ptr];
-			*scope_find((char*)name) = stack[--stack_ptr];
+			*scope_find((char*)name, 0) = stack[--stack_ptr];
 		} else if (extra_builtin && extra_builtin(&loc)) {
 			// nothing
 		} else if (*loc == '[') {
-			execute_at((char *)*scope_find(loc + 1));
+			execute_at((char *)*scope_find(loc + 1, 1));
 			until(']', &loc);
 			loc++;
 		} else {

@@ -14,8 +14,8 @@ extern unsigned long stack[];
 // index of first free location in stack
 extern unsigned long stack_ptr;
 
-// scope management
-unsigned long* scope_find(char* name);
+// scope management (debug_value_expected is a debug hint)
+unsigned long* scope_find(char* name, int debug_value_expected);
 
 // start interpreting at loc
 void execute_at(char *loc);
@@ -23,6 +23,8 @@ void execute_at(char *loc);
 // hook to extend builtin commands
 extern int (*extra_builtin)(char** loc);
 
+// Scope symbol not found debug callback
+extern int (*symbol_not_found)(char *symbol_name);
 
 int eat(const char *word, char **location);
 
