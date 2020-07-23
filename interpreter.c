@@ -41,9 +41,10 @@ unsigned long* scope_find(char* name, int debug_value_expected) {
 	}
 	if (p == end && debug_value_expected && symbol_not_found)
 		symbol_not_found(name);
-	if (p == end)
+	if (p == end) {
 		scope_used++;
-	p->name = (unsigned long)name;
+		p->name = (unsigned long)name;
+	}
 	return &p->value;
 }
 
