@@ -162,6 +162,11 @@ void execute_at(char *loc) {
 			stack[stack_ptr - 1] = ~stack[stack_ptr - 1];
 		} else if (eat("!", &loc)) {
 			execute_at((char *)stack[--stack_ptr]);
+		} else if (eat("??", &loc)) {
+			unsigned long loop = stack[--stack_ptr];
+			do {
+				execute_at((char*)loop);
+			} while (stack[--stack_ptr]);
 		} else if (eat("?", &loc)) {
 			unsigned long cond = stack[--stack_ptr];
 			unsigned long jump = stack[--stack_ptr];
