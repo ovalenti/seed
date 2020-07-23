@@ -1,0 +1,34 @@
+/*
+ * Copyright (c) 2020, Olivier Valentin
+ * All rights reserved.
+ *
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+/*
+ * Copyright (c) 2020, Olivier Valentin
+ * All rights reserved.
+ *
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+#ifndef MATH_SEED
+#define MATH_SEED
+
+"{"
+"	[DUP]"
+"	2 [GE]"
+"	{"
+"		[DUP]"
+"		1 [SUB]"
+"		[FIBO]"
+"		[SWAP]"
+"		2 [SUB]"
+"		[FIBO]"
+"		[ADD]"
+"	}"
+"	[SWAP] ?"
+"} {FIBO} [STORE]"
+
+ #endif
