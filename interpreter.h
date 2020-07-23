@@ -14,6 +14,9 @@ extern unsigned long stack[];
 // index of first free location in stack
 extern unsigned long stack_ptr;
 
+// scope management
+unsigned long* scope_find(char* name);
+
 // start interpreting at loc
 void execute_at(char *loc);
 

@@ -30,7 +30,7 @@ static int str_match(char *v1, char *v2) {
 	return *v1 == '}' || *v1 == ']';
 }
 
-static unsigned long* scope_find(char* name) {
+unsigned long* scope_find(char* name) {
 	struct scope *p = scope, *end = scope + scope_used;
 
 	while (p < end) {
