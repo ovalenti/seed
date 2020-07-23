@@ -9,7 +9,20 @@
 #ifndef BASE_SEED
 #define BASE_SEED
 
+// Exchange 2 elements on top of stack
 "{ 1 [ROT] } {SWAP} [STORE]"
+
+// boolean negation
+"{ 1 [GE] 1 [XOR] } {NOT} [STORE]"
+
+// equal
+"{ [SUB] [NOT] } {EQ} [STORE]"
+
+// less-than
+"{ [GE] [NOT] } {LT} [STORE]"
+
+// greater-than
+"{ [SWAP] [LT] } {GT} [STORE]"
 
 // HEAP is the start of allocatable space
 // HEAP_FREE is the start of free space
