@@ -11,4 +11,19 @@
 
 "{ 1 [ROT] } {SWAP} [STORE]"
 
+// HEAP is the start of allocatable space
+// HEAP_FREE is the start of free space
+"{HEAP}* {HEAP_FREE} [STORE]"
+
+// Eat an amount in bytes, and reserve space on heap. Returns pointer.
+"{"
+"	{HEAP_FREE}*"
+"	[DUP]"
+"	2 [ROT] [ADD]"
+"	{HEAP_FREE} [STORE]"
+"} {SBRK} [STORE]"
+
+
+
+
  #endif
