@@ -7,11 +7,19 @@
  */
 
 #include <stdio.h>
+#include <termios.h>
 
 void basic_io_outc(char c) {
 	putc(c, stdout);
 }
 
 char basic_io_inc() {
+	static int init = 0;
+	if (!init) {
+		struct termios termios = { 0 };
+		cfmakeraw(&termios);
+		tcsetattr(fileno(stdin), TCSANOW, &termios);
+		init = 1;
+	}
 	return getc(stdin);
 }
