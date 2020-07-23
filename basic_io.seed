@@ -40,7 +40,28 @@
 "	[PRINTDIGIT]"
 "} {PRINTINT} [STORE]"
 
+// Line-feed
+"{ 0xa [OUTC] } {LF} [STORE]"
+
+// Carriage return
+"{ 0xd [OUTC] } {CR} [STORE]"
+
 // New-line
-"{ 0xa [OUTC] } {NL} [STORE]"
+"{ [CR][LF] } {NL} [STORE]"
+
+// Print a 0 terminated string. Eats a memory location.
+"{"
+"	{"
+"		[DUP]"
+"		1 [ADD] [SWAP]"
+"		[PEEK]"
+"		[DUP]"
+"		{[OUTC] 1}"
+"		{[DROP] 0}"
+"		{[SWAP]}"
+"		3 [ROT] 0 [EQ] ?"
+"		[DROP] !"
+"	} ?? [DROP]"
+"} {PRINTSTR} [STORE]"
 
  #endif
