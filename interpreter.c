@@ -28,7 +28,7 @@ static int str_match(char *v1, char *v2) {
 	while (*v1 == *v2 && *v1 != '}' && *v1 != ']') {
 		v1++; v2++;
 	}
-	return *v1 == '}' || *v1 == ']';
+	return (*v1 == '}' || *v1 == ']') && (*v2 == '}' || *v2 == ']');
 }
 
 unsigned long* scope_find(char* name, int debug_value_expected) {
