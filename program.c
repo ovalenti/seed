@@ -11,27 +11,7 @@
 char* program =
 #include "base.seed"
 #include "basic_io.seed"
-		"{"
-		"	[DUP]"
-		"	2 [GE]"
-		"	{"
-		"		[DUP]"
-		"		1 [SUB]"
-		"		[FIBO]"
-		"		[SWAP]"
-		"		2 [SUB]"
-		"		[FIBO]"
-		"		[ADD]"
-		"	}"
-		"	[SWAP] ?"
-		"} {FIBO} [STORE]"
+#include "editor.seed"
 
-		"4 [FIBO]"
-		"[PRINTINT] [NL]"
-
-		"5 [FIBO]"
-		"[PRINTINT] [NL]"
-
-		"10 [FIBO]"
-		"[PRINTINT] [NL]"
+		"[EDITOR.MAIN]"
 		"}";

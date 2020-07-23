@@ -1,0 +1,141 @@
+/*
+ * Copyright (c) 2020, Olivier Valentin
+ * All rights reserved.
+ *
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+#ifndef EDITOR_SEED
+#define EDITOR_SEED
+
+#include "base.seed"
+#include "basic_io.seed"
+
+"1024 {EDITOR.BUFFLEN} [STORE]"
+"{EDITOR.BUFFLEN}* [SBRK] {EDITOR.BUFF} [STORE]"
+
+// Copy a byte, if between bounds
+// Eats 2 char offsets relative to the buffer start (from, to)
+"{"
+	// check destination
+"	[DUP]"
+"	{"
+		// ok
+		// calculate absolute destination
+"		{EDITOR.BUFF}* [ADD]"
+		
+		// check source
+"		[SWAP]"
+"		[DUP]"
+"		{"
+			// ok
+"			{EDITOR.BUFF}* [ADD]"
+"			[PEEK]"
+"			[SWAP]"
+"			[POKE]"
+"		}"
+"		{"
+			// bad source, use \0
+"			[DROP] 0"
+"			[SWAP]"
+"			[POKE]"
+"		}"
+"		{[SWAP]}"
+"		3 [ROT] {EDITOR.BUFFLEN}* [GE]"
+"		? [DROP] !"
+"	}"
+"	{"
+		// bad destination
+"		[DROP]"
+"		[DROP]"
+"	}"
+"	{[SWAP]}"
+"	3 [ROT] {EDITOR.BUFFLEN}* [GE]"
+"	? [DROP] !"
+"} {EDITOR.COPY} [STORE]"
+
+// Eat one character and insert at current position
+"{"
+	// make a hole
+"	{EDITOR.BUFFLEN}*"
+"	{"
+"		[DUP]"
+"		[DUP]"
+"		1 [ADD]"
+"		[EDITOR.COPY]"
+"		1 [SUB]"
+"		[DUP] {EDITOR.PTR}* [GT]"
+"	} ??"
+"	[DROP]"
+	// insert
+"	{EDITOR.PTR}* {EDITOR.BUFF}* [ADD]"
+"	[POKE]"
+"} {EDITOR.INSERT} [STORE]"
+
+// Delete at current position
+"{"
+"	{EDITOR.PTR}*"
+"	{"
+"		[DUP]"
+"		[DUP]"
+"		1 [ADD]"
+"		[SWAP]"
+"		[EDITOR.COPY]"
+"		1 [ADD]"
+"		[DUP] {EDITOR.BUFFLEN}* [LT]"
+"	} ??"
+"	[DROP]"
+"} {EDITOR.DELETE} [STORE]"
+
+"{"
+"	0 {EDITOR.PTR} [STORE]"
+"	0 {EDITOR.INSERTING} [STORE]"
+"	0 {EDITOR.BUFF}* [POKE]"
+"	{\e[2K\r\0} [PRINTSTR]"
+"	{"
+"		[INC]"
+"		{EDITOR.CC} [STORE]"
+"		{"
+			// navigate mode
+"			{"
+"				{EDITOR.PTR}* 1 [ADD] {EDITOR.PTR} [STORE]"
+"				{\e[C\0} [PRINTSTR]"
+"			} {EDITOR.CC}* {l} [PEEK] [EQ] ?"
+"			{"
+"				{EDITOR.PTR}* 1 [SUB] {EDITOR.PTR} [STORE]"
+"				{\e[D\0} [PRINTSTR]"
+"			} {EDITOR.CC}* {h} [PEEK] [EQ] ?"
+"			{"
+"				1 {EDITOR.INSERTING} [STORE]"
+"			} {EDITOR.CC}* {i} [PEEK] [EQ] ?"
+"			{"
+"				[EDITOR.DELETE]"
+"			} {EDITOR.CC}* {x} [PEEK] [EQ] ?"
+"		}"
+"		{"
+			// insert mode
+"			{"
+"				{EDITOR.CC}* [EDITOR.INSERT]"
+"				{EDITOR.PTR}* 1 [ADD] {EDITOR.PTR} [STORE]"
+"				{\e[C\0} [PRINTSTR]"
+"			} {EDITOR.CC}* {\e} [PEEK] [EQ] [NOT] ?"
+"			{"
+"				0 {EDITOR.INSERTING} [STORE]"
+"			} {EDITOR.CC}* {\e} [PEEK] [EQ] ?"
+"		}"
+"		{[SWAP]}"
+"		{EDITOR.INSERTING}* ? [DROP] !"
+	
+		// reprint editor line
+"		{\e[K\e[s\r\0} [PRINTSTR]"
+"		{EDITOR.BUFF}* [PRINTSTR]"
+"		{\e[u\0} [PRINTSTR]"
+		
+		// check for quit
+"		{EDITOR.CC}* 0x4 [EQ] [NOT]"
+"	} ??"
+
+"} {EDITOR.MAIN} [STORE]"
+
+ #endif
