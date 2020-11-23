@@ -134,9 +134,8 @@ void execute_at(char *loc) {
 
 		if (eat("[DROP]", &loc)) {
 			stack_ptr--;
-		} else if (eat("[DUP]", &loc)) {
-			stack[stack_ptr] = stack[stack_ptr - 1];
-			stack_ptr++;
+		} else if (eat("[COPY]", &loc)) {
+			stack[stack_ptr - 1] = stack[stack_ptr - stack[stack_ptr - 1] - 2];
 		} else if (eat("[ROT]", &loc)) {
 			int r = stack[--stack_ptr]; // pop
 			unsigned long *p1 = &stack[stack_ptr - r], *p2 = p1 - 1;

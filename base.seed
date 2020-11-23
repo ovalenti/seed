@@ -12,6 +12,9 @@
 // Exchange 2 elements on top of stack
 "{ 1 [ROT] } {SWAP} [STORE]"
 
+// Duplicate top-most element
+"{ 0 [COPY] } {DUP} [STORE]"
+
 // boolean negation
 "{ 1 [GE] 1 [XOR] } {NOT} [STORE]"
 
