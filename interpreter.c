@@ -14,7 +14,7 @@ unsigned long stack[256];
 unsigned long stack_ptr = 0;
 
 int (*extra_builtin)(char** loc) = 0;
-int (*symbol_not_found)(char *symbol_name) = 0;
+void (*symbol_not_found)(char *symbol_name) = 0;
 
 #define SCOPE_LEN 256
 static struct scope {

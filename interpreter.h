@@ -24,7 +24,7 @@ void execute_at(char *loc);
 extern int (*extra_builtin)(char** loc);
 
 // Scope symbol not found debug callback
-extern int (*symbol_not_found)(char *symbol_name);
+extern void (*symbol_not_found)(char *symbol_name);
 
 int eat(const char *word, char **location);
 
