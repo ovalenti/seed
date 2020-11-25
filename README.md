@@ -127,6 +127,19 @@ The conditionnal execution is achieved by two means:
 ? [DROP] !
 ```
 
+*build a while(<test>) construct (while not using the stack to store the test result):*
+
+Use the ?? builtin and wrap the body in a conditional.
+
+```
+{
+	{ 0 }
+	{ <body> 1 }
+	{[SWAP]}
+	<test> ? [DROP] !
+} ??
+```
+
 *Compute Fibonacci numbers:*
 
 ```
