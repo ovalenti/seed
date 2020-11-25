@@ -71,6 +71,7 @@ static void skip(char **location) {
 		case ' ':
 		case '\t':
 		case '\n':
+		case '\r':
 			(*location)++;
 			break;
 		default:
