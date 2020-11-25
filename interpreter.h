@@ -18,7 +18,7 @@ extern unsigned long stack_ptr;
 unsigned long* scope_find(char* name, int debug_value_expected);
 
 // start interpreting at loc
-void execute_at(char *loc);
+void execute_at(char *loc, int initial_step);
 
 // hook to extend builtin commands
 extern int (*extra_builtin)(char** loc);
@@ -28,5 +28,6 @@ extern void (*symbol_not_found)(char *symbol_name);
 
 int eat(const char *word, char **location);
 
+extern void debug(const char *location, int *step, int *callee_step);
 
 #endif /* INTERPRETER_H_ */

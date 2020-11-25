@@ -128,9 +128,14 @@ static void swap(unsigned long *a, unsigned long *b) {
 		unsigned long v = stack[--stack_ptr]; \
 		stack[stack_ptr - 1] = stack[stack_ptr - 1] op v;
 
-void execute_at(char *loc) {
+void execute_at(char *loc, int initial_step) {
+	int step = initial_step;
+	int callee_step = 0;
+
 	while (1) {
 		skip(&loc);
+
+		debug(loc, &step, &callee_step);
 
 		if (eat("[DROP]", &loc)) {
 			stack_ptr--;
@@ -161,20 +166,20 @@ void execute_at(char *loc) {
 		} else if (eat("[BNOT]", &loc)) {
 			stack[stack_ptr - 1] = ~stack[stack_ptr - 1];
 		} else if (eat("!", &loc)) {
-			execute_at((char *)stack[--stack_ptr]);
+			execute_at((char *)stack[--stack_ptr], callee_step);
 		} else if (eat("[CALL]", &loc)) {
 			void(*fnct)(unsigned long*, unsigned long) = (void(*)(unsigned long*, unsigned long))stack[--stack_ptr];
 			fnct(stack, stack_ptr);
 		} else if (eat("??", &loc)) {
 			unsigned long loop = stack[--stack_ptr];
 			do {
-				execute_at((char*)loop);
+				execute_at((char*)loop, callee_step);
 			} while (stack[--stack_ptr]);
 		} else if (eat("?", &loc)) {
 			unsigned long cond = stack[--stack_ptr];
 			unsigned long jump = stack[--stack_ptr];
 			if (cond)
-				execute_at((char *)jump);
+				execute_at((char *)jump, callee_step);
 		} else if (eat("}", &loc)) {
 			return;
 		} else if (eat("#", &loc)) {
@@ -184,10 +189,12 @@ void execute_at(char *loc) {
 		} else if (eat("[STORE]", &loc)) {
 			unsigned long name = stack[--stack_ptr];
 			*scope_find((char*)name, 0) = stack[--stack_ptr];
+		} else if (eat("[TRACE]", &loc)) {
+			step = 1;
 		} else if (extra_builtin && extra_builtin(&loc)) {
 			// nothing
 		} else if (*loc == '[') {
-			execute_at((char *)*scope_find(loc + 1, 1));
+			execute_at((char *)*scope_find(loc + 1, 1), callee_step);
 			until(']', &loc);
 			loc++;
 		} else {
