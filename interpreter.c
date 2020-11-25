@@ -158,7 +158,7 @@ void execute_at(char *loc) {
 		} else if (eat("[OR]", &loc)) { BIN_ARITH(|)
 		} else if (eat("[XOR]", &loc)) { BIN_ARITH(^)
 		} else if (eat("[GE]", &loc)) { BIN_ARITH(>=)
-		} else if (eat("[NOT]", &loc)) {
+		} else if (eat("[BNOT]", &loc)) {
 			stack[stack_ptr - 1] = ~stack[stack_ptr - 1];
 		} else if (eat("!", &loc)) {
 			execute_at((char *)stack[--stack_ptr]);
