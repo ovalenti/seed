@@ -1,0 +1,62 @@
+#ifndef BASIC_IO_SEED_LINUX_X86_64
+#define BASIC_IO_SEED_LINUX_X86_64
+
+#include "base.seed"
+
+
+// 0000000000001125 <putc>:
+//     1125:	48 c7 c2 01 00 00 00 	mov    $0x1,%rdx
+//     112c:	48 8b 74 f7 f8       	mov    -0x8(%rdi,%rsi,8),%rsi
+//     1131:	b8 01 00 00 00       	mov    $0x1,%eax
+//     1136:	bf 01 00 00 00       	mov    $0x1,%edi
+//     113b:	0f 05                	syscall 
+//     113d:	c3                   	retq
+
+
+"{"
+"	1 [COPY]"
+"	[POKE]"
+"	1 [ADD]"
+"} {APPEND} [STORE]"
+
+"25 [SBRK] {WRITE_SYSCALL} [STORE]"
+
+"{WRITE_SYSCALL}*"
+"0x48 [APPEND]"
+"0xc7 [APPEND]"
+"0xc2 [APPEND]"
+"0x01 [APPEND]"
+"0x00 [APPEND]"
+"0x00 [APPEND]"
+"0x00 [APPEND]"
+
+"0x48 [APPEND]"
+"0x8b [APPEND]"
+"0x74 [APPEND]"
+"0xf7 [APPEND]"
+"0xf8 [APPEND]"
+
+"0xb8 [APPEND]"
+"0x01 [APPEND]"
+"0x00 [APPEND]"
+"0x00 [APPEND]"
+"0x00 [APPEND]"
+
+"0xbf [APPEND]"
+"0x01 [APPEND]"
+"0x00 [APPEND]"
+"0x00 [APPEND]"
+"0x00 [APPEND]"
+
+"0x0f [APPEND]"
+"0x05 [APPEND]"
+
+"0xc3 [APPEND]"
+
+"[DROP]"
+
+"1 [SBRK] {WRITE_SYSCALL.BUFFER} [STORE]"
+
+"{ {WRITE_SYSCALL.BUFFER}* [POKE] {WRITE_SYSCALL.BUFFER}* {WRITE_SYSCALL}* [CALL] [DROP] } {OUTC} [STORE]"
+
+#endif
