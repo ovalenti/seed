@@ -162,6 +162,9 @@ void execute_at(char *loc) {
 			stack[stack_ptr - 1] = ~stack[stack_ptr - 1];
 		} else if (eat("!", &loc)) {
 			execute_at((char *)stack[--stack_ptr]);
+		} else if (eat("[CALL]", &loc)) {
+			void(*fnct)(unsigned long*, unsigned long) = (void(*)(unsigned long*, unsigned long))stack[--stack_ptr];
+			fnct(stack, stack_ptr);
 		} else if (eat("??", &loc)) {
 			unsigned long loop = stack[--stack_ptr];
 			do {
