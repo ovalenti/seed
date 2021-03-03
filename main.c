@@ -22,7 +22,7 @@ static int extra_builtin_basic_io(char **pos) {
 	return !0;
 }
 
-int main() {
+int main(void) {
 	extra_builtin = &extra_builtin_basic_io;
 	*scope_find("{HEAP}" + 1, 0) = (unsigned long)heap;
 	execute_at(program);

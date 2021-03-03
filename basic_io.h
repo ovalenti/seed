@@ -13,6 +13,6 @@
 void basic_io_outc(char c);
 
 // Waits for a character to be available and return it
-char basic_io_inc();
+char basic_io_inc(void);
 
 #endif /* BASIC_IO_H_ */
