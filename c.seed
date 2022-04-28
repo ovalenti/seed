@@ -1,0 +1,46 @@
+#ifndef C_SEED
+#define C_SEED
+
+// [little] write an integer to memory (0: nm_bytes, 1: addr, 2: value -> '') 
+"{"
+"	{"
+"		{"
+"			[DROP] [DROP] [DROP] 0"
+"		}"
+"		{"
+"			2 [COPY]"
+"			2 [COPY]"
+"			[POKE]"
+"			2 [ROT] 256 [DIV]"
+"			2 [ROT] 1 [ADD]"
+"			2 [ROT] 1 [SUB] 1"
+"		}"
+"		{[SWAP]} 3 [COPY] ? [DROP] !"
+"	} ??"
+"} {POKEN} [STORE]"
+
+// [little] read an integer from memory (0: nm_bytes, 1: addr -> value)
+"{"
+	// point on last byte: addr = addr + nm_bytes - 1
+"	[DUP] 2 [ROT] [ADD] 1 [SUB] [SWAP]"
+	
+	// work with (0: value, 1: nm_bytes, 2: addr)
+"	0"
+"	{"
+"		{"
+"			2 [ROT] 2 [ROT] [DROP] [DROP] 0"
+"		}"
+"		{"
+"			8 [SHIFT]"
+"			2 [COPY]"
+"			[PEEK]"
+"			[OR]"
+"			2 [ROT] 1 [SUB]"
+"			2 [ROT] 1 [SUB]"
+"			2 [ROT] 1"
+"		}"
+"		{[SWAP]} 4 [COPY] ? [DROP] !"
+"	} ??"
+"} {PEEKN} [STORE]"
+
+#endif
